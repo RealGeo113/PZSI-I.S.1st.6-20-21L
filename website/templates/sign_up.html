@@ -1,0 +1,56 @@
+<!--
+korzysta z szablonu base.html
+zmienia jedynie jeden blok
+-->
+{% extends "base.html" %}
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+
+    <form method="POST">
+        <div><h1 align="center">To jest strona, na której możesz się zarejestrować.</h1></div>
+        <div class="form-group">
+            <label for="email">Adres email</label>
+            <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Wprowadź adres email"
+            />
+        </div>
+        <div class="form-group">
+            <label for="firstName">Nazwa użytkownika</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    placeholder="Wprowadź nazwę użytkownika"
+            />
+        </div>
+        <div class="form-group">
+            <label for="password1">Hasło</label>
+            <input
+                    type="password"
+                    class="form-control"
+                    id="password1"
+                    name="password1"
+                    placeholder="Podaj hasło"
+            />
+        </div>
+        <div class="form-group">
+            <label for="password2">Powtórz hasło</label>
+            <input
+                    type="password"
+                    class="form-control"
+                    id="password2"
+                    name="password2"
+                    placeholder="Powtórz hasło"
+            />
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Zarejestruj się!</button>
+    </form>
+
+{% endblock %}
