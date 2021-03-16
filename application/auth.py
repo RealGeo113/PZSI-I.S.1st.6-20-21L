@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from .models import db, User
 
 
 # tutaj sa tworzone Routes - czyli podstrony na ktore serwer ma kierowac zapytanie
@@ -29,7 +28,7 @@ def login():
         else:
             flash('Niepoprawne hasło lub konto pod danym adresem email nie istnieje. (email)', category='error')
 
-    return render_template("login.html", user=current_user)
+    return render_template("auth/login.html", user=current_user)
 
 
 @auth.route('/logout')
@@ -75,4 +74,4 @@ def sign_up():
             # po dodaniu uzytkownika przekieruj na homepage
             return redirect(url_for('views.home'))
 
-    return render_template("sign_up.html", user=current_user)
+    return render_template("auth/sign_up.html", user=current_user)

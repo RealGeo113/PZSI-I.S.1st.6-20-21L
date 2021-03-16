@@ -3,13 +3,17 @@
 # UserMixin to modul ulatwiajacy napisanie logowania
 # tworzymy tutaj modele na wzor naszych tabel w bazie danych
 
-from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
 
 
 # klasa uzytkownik musi dziedziczyc po db.Model oraz UserMixin
 class User(db.Model, UserMixin):
+    __tablename__ = "user"
     user_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
@@ -32,6 +36,7 @@ class User(db.Model, UserMixin):
 
 # pokoje, chatroomy
 class Room(db.Model):
+    __tablename__ = "room"
     room_id = db.Column(db.Integer, primary_key=True)
     roomname = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150), default=None)
@@ -47,6 +52,7 @@ class Room(db.Model):
 
 # notatki dodawane przez uzytkownika
 class Note(db.Model):
+    __tablename__ = "note"
     note_id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(10000))
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
@@ -57,6 +63,7 @@ class Note(db.Model):
 
 # wiadomosc 'normalna' wysylana w chatroomie
 class Message(db.Model):
+    __tablename__ = "message"
     message_id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
@@ -68,6 +75,7 @@ class Message(db.Model):
 
 # prywatna wiadomosc wysylana bezposrednio miedzy uzytkownikami
 class PrivateMessage(db.Model):
+    __tablename__ = "private_message"
     private_message_id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(10000))
 
@@ -81,6 +89,7 @@ class PrivateMessage(db.Model):
 
 # ustawienia uzytkownika ktore sobie sam zdefiniuje. pozniej mozna dodac jeszcze wiecej
 class UserSettings(db.Model):
+    __tablename__ = "user_settings"
     user_settings_id = db.Column(db.Integer, primary_key=True)
     app_theme = db.Column(db.String(5))
 
@@ -95,6 +104,7 @@ class UserSettings(db.Model):
 # 2	Declined
 # 3	Blocked
 class UserRelation(db.Model):
+    __tablename__ = "user_relation"
     user_relation_id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.SmallInteger)
 
@@ -112,14 +122,15 @@ class UserRelation(db.Model):
 
 # uzytkownicy obecni w danym pokoju
 class Participant(db.Model):
-   participant_id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = "participant"
+    participant_id = db.Column(db.Integer, primary_key=True)
 
-   user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-   room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
-
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
 
 # lista zablokowanych uzytkownikow w danym pokoju
 class BlockedParticipant(db.Model):
+    __tablename__ = "blocked_participant"
     blocked_participant_id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String(150))
 
