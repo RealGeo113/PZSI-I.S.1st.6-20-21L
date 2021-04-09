@@ -1,0 +1,33 @@
+<!--
+korzysta z szablonu base.html
+zmienia jedynie jeden blok
+-->
+{% extends "base.html" %}
+{% block title %}Rooms{% endblock %}
+
+
+{% block content %}
+    <div><h1 align="center">To jest strona z listą pokoi.</h1></div>
+    <table>
+        <thead>
+            <tr>
+                <th>room_id</th>
+                <th>roomname</th>
+                <th>roomtype</th>
+                <th>user_limit</th>
+                <th>owner_id</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for Room in all_rooms %}
+        <tr>
+            <td>{{ Room.room_id }}</td>
+            <td>{{ Room.roomname }}</td>
+            <td>{{ Room.roomtype }}</td>
+            <td>{{ Room.user_limit }}</td>
+            <td>{{ Room.owner_id }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

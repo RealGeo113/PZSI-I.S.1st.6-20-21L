@@ -16,10 +16,12 @@ def create_app():
     # dajemy znac programowi ze te moduly istnieja
     from .views import views
     from .auth import auth
+    from .chat import chat
     from .models import User
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(chat, url_prefix='/')
 
     # zaimportuj modele z bazy danych
     # jesli jeszcze nie ma stworzonej bazy danych, to ja utworz
@@ -41,6 +43,6 @@ def create_app():
 
 
 def create_dev_database(app):
-    if not path.exists('website/' + app.config['DEV_DB_NAME']):
+    if not path.exists('application/' + app.config['DEV_DB_NAME']):
         db.create_all(app=app)
         print('Baza danych została utworzona.')

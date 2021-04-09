@@ -40,7 +40,7 @@ class Room(db.Model):
     room_id = db.Column(db.Integer, primary_key=True)
     roomname = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150), default=None)
-    type = db.Column(db.String(150)) # do poprawy! trzeba zdefiniowac typ (chat, whiteboard)
+    roomtype = db.Column(db.String(150)) # do poprawy! trzeba zdefiniowac typ (chat, whiteboard)
     user_limit = db.Column(db.Integer)
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
