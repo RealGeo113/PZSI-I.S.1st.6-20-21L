@@ -14,6 +14,7 @@ zmienia jedynie jeden blok
                 <th>room_id</th>
                 <th>roomname</th>
                 <th>roomtype</th>
+                <th>accesstype</th>
                 <th>user_limit</th>
                 <th>owner_id</th>
             </tr>
@@ -24,8 +25,12 @@ zmienia jedynie jeden blok
             <td>{{ Room.room_id }}</td>
             <td>{{ Room.roomname }}</td>
             <td>{{ Room.roomtype }}</td>
+            <td>{{ Room.accesstype }}</td>
             <td>{{ Room.user_limit }}</td>
             <td>{{ Room.owner_id }}</td>
+            <td><button type="button" class="close" onclick="deleteRoom({{ Room.room_id }})">
+                <span aria-hidden="true">&times;</span>
+            </button></td>
         </tr>
         {% endfor %}
         </tbody>

@@ -28,6 +28,7 @@ class User(db.Model, UserMixin):
     user_settings = db.relationship('UserSettings')
     is_participant_in = db.relationship('Participant')
     is_blocked_participant_in = db.relationship('BlockedParticipant')
+    is_allowed_participant_in = db.relationship('AllowedParticipant')
 
     # musze napisac metode bo logowanie przestalo poprawnie dzialac
     def get_id(self):
@@ -42,12 +43,14 @@ class Room(db.Model):
     password = db.Column(db.String(150), default=None)
     roomtype = db.Column(db.String(150)) # do poprawy! trzeba zdefiniowac typ (chat, whiteboard)
     user_limit = db.Column(db.Integer)
+    accesstype = db.Column(db.String(150)) # do poprawy! trzeba zdefiniowac typ (publiczny, prywatny)
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
 
     messages = db.relationship('Message')
     participants = db.relationship('Participant')
     blocked_participants = db.relationship('BlockedParticipant')
+    allowed_participants = db.relationship('AllowedParticipant')
 
 
 # notatki dodawane przez uzytkownika
@@ -133,6 +136,14 @@ class BlockedParticipant(db.Model):
     __tablename__ = "blocked_participant"
     blocked_participant_id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String(150))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
+
+# lista dopuszczonych uzytkownikow do prywatnego pokoju
+class AllowedParticipant(db.Model):
+    __tablename__ = "allowed_participant"
+    allowed_participant_id = db.Column(db.Integer, primary_key=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
