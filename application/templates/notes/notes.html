@@ -1,0 +1,39 @@
+<!--
+korzysta z szablonu base.html
+zmienia jedynie jeden blok
+-->
+{% extends "base.html" %}
+{% block title %}Notes{% endblock %}
+
+
+{% block content %}
+    <div><h1 align="center">To jest strona z notatkami.</h1></div>
+    <table>
+        <thead>
+            <tr>
+                <th>note_id</th>
+                <th>content</th>
+                <th>creation_date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for Note in all_notes %}
+        <tr>
+            <td>{{ Note.note_id }}</td>
+            <td>{{ Note.content }}</td>
+            <td>{{ Note.creation_date}}</td>
+            <td>
+                <button type="button" class="close" onclick="editNote({{ Note.note_id }})">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </td>
+            <td>
+                <button type="button" class="close" onclick="deleteNote({{ Note.note_id }})">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
