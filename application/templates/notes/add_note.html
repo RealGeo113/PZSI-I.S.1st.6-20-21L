@@ -1,0 +1,31 @@
+<!--
+korzysta z szablonu base.html
+zmienia jedynie jeden blok
+-->
+{% extends "base.html" %}
+{% block title %}Add note{% endblock %}
+
+{% block content %}
+
+    <form method="POST">
+        <div><h1 align="center">To jest strona, na której możesz dodać notatkę.</h1></div>
+
+
+        <div class="form-group">
+            <label for="noteContent">Treść notatki</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="noteContent"
+                    name="noteContent"
+                    {% if note %}
+                    placeholder="{{ content }}"
+                    {% endif %}
+            />
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-primary">Dodaj notatkę!</button>
+
+    </form>
+
+{% endblock %}

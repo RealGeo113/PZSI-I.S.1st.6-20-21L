@@ -1,10 +1,20 @@
-<!--
-korzysta z szablonu base.html
-zmienia jedynie jeden blok
--->
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div><h1 align="center">To jest strona domowa.</h1></div>
+    <div id="buttons">
+        <a id="rooms2" href="/rooms"><div class="home_button">
+            <p>Czat</p>
+        </div></a>
+        <a id="notes2" href="/notes"><div class="home_button">
+            <p>Notatki</p>
+        </div></a>
+    </div>
+    <div id="center-text">
+        {% if user.is_authenticated %}
+            <p>Zaloguj się aby korzystać ze wszystkich funkcji naszej strony!</p>
+        {% else %}
+            <p>Witaj na stronie głównej!</p>
+        {% endif %}
+    </div>
 {% endblock %}

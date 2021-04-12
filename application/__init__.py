@@ -17,11 +17,13 @@ def create_app():
     from .views import views
     from .auth import auth
     from .chat import chat
+    from .notes import notes
     from .models import User
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(chat, url_prefix='/')
+    app.register_blueprint(notes, url_prefix='/')
 
     # zaimportuj modele z bazy danych
     # jesli jeszcze nie ma stworzonej bazy danych, to ja utworz

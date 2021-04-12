@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for
 from flask_login import login_required, current_user
-from .models import db, User, Room
+from .models import db, User, Room, Note
 
 
 # tutaj sa tworzone Routes - czyli podstrony na ktore serwer ma kierowac zapytanie
@@ -29,3 +29,14 @@ def rooms():
     # print(all_rooms)
 
     return render_template("chat/rooms.html", user=current_user, all_rooms=all_rooms)
+
+
+@views.route('/notes', methods=['GET', 'POST'])
+@login_required
+def notes():
+    """
+    :return: list of all notes
+    """
+    all_notes = Note.query.all()
+
+    return render_template("notes/notes.html", user=current_user, all_notes=all_notes)

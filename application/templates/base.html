@@ -1,16 +1,12 @@
-<!--
-jinja templating language
-specjalny jezyk do pisania template'ow
-pozwala uzywac pythonowe wstawek w html'u
-mamy jeden template - wzorzec
-i pozwalamy dac sie nadpisywac innym dokumentom html
--->
-
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!DOCTYPE HTML>
+<html lang="pl-PL">
+	<head>
+		<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.png') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/base_style.css') }}"/>
+        {% block styles %}
+        {% endblock %}
+        {% block scripts %}
+        {% endblock %}
         <link
                 rel="stylesheet"
                 href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -22,64 +18,26 @@ i pozwalamy dac sie nadpisywac innym dokumentom html
                 href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
                 crossorigin="anonymous"
         />
+		<meta charset="UTF-8"/>
+		<title>{% block title %}Home{% endblock %}</title>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	</head>
+	<body>
+		<div id="header">
+			<a href="/">
+				<img src="../static/images/banner.png" style="position:relative;height:200px; width:600px">
+			</a>
+			{% if user.is_authenticated %}
+				<a id="home" href="/"><button class="button1">Strona główna</button></a>
+				<a id="rooms" href="/rooms"><button class="button1">Lista pokoi</button></a>
+				<a id="notes" href="/notes"><button class="button1">Notatki</button></a>
+				<a id="logout" href="/logout"><button class="button1">Wyloguj</button></a>
+			{% else %}
+				<a id="login" href="/login"><button class="button1">Zaloguj się</button></a>
+				<a id="signUp" href="/sign-up"><button class="button1">Zarejestruj się</button></a>
+			{% endif %}
+		</div>
 
-        <!--
-        zawsze kiedy uzywamy jenga, to jest jedna z opcji deklaracji syntaxa
-        w srodku mozemy zdefiniowac jakies if'y, wyrazenia
-        deklarujemy blok ktory moze zostac nadpisany
-        -->
-        <title>{% block title %}Home{% endblock %}</title>
-    </head>
-    <body>
-        <!--
-        chamska wstawka style bo nie chcialo mi sie wkladac tego do rooms.html wiec robie tutaj xd
-        -->
-        <style>
-
-            td {
-                width: 150px;
-                text-align: center;
-                border: 1px solid #000000;
-                padding: 5px;
-            }
-        </style>
-        <!--
-        zdefiniowanie navbara
-        oraz guzikow kierujacych na podstrony
-        jest dodane lekkie stylowanie z bootstrapa
-        -->
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbar"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <div class="navbar-nav">
-                            {% if user.is_authenticated %}
-                                <a class="nav-item nav-link" id="home" href="/">Strona główna</a>
-                                <a class="nav-item nav-link" id="rooms" href="/rooms">Lista pokoi</a>
-                                <a class="nav-item nav-link" id="addRoom" href="/add-room">Dodaj pokój</a>
-                                <a class="nav-item nav-link" id="logout" href="/logout">Wyloguj</a>
-                            {% else %}
-                                <a class="nav-item nav-link" id="login" href="/login">Zaloguj się</a>
-                                <a class="nav-item nav-link" id="signUp" href="/sign-up">Zarejestruj się</a>
-                            {% endif %}
-                </div>
-            </div>
-        </nav>
-
-        <!--
-        obsługa komunikatow flash, wykorzystywanych przy raportowaniu błędów
-        w tym miejscu, zaraz pod navbarem, beda wyświetlane wiadomości
-        pobiera zmienna messages, jesli zostala utworzona
-        pokazuje komunikat ktory da sie zamknac
-        pozniej wyswietla fancy X ktorym mozna zamknac error'a
-        -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -104,17 +62,11 @@ i pozwalamy dac sie nadpisywac innym dokumentom html
             {% endif %}
         {% endwith %}
 
-        <!--
-        deklaracja kolejnego bloku ktory moze byc nadpisywany przez inne template'y
-        -->
-        <div class="container">
-            {% block content %}
-            {% endblock %}
-        </div>
+		<div>
+			{% block content %}
+			{% endblock %}
+		</div>
 
-        <!--
-        załadowanie skryptow z js'a ktore obsluguja bootstrapa - jego animacje
-        -->
         <script
                 src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
                 integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -131,13 +83,9 @@ i pozwalamy dac sie nadpisywac innym dokumentom html
                 crossorigin="anonymous"
         ></script>
 
-        <!--
-        w taki sposob zalacza sie plik js'owy z folderu static
-        tam gdzie sa podwojne nawiasy klamrowe, mozna uzywac pythona
-        -->
-        <script
-         type="text/javascript"
-         src="{{ url_for('static', filename='index.js') }}"
-        ></script>
-    </body>
+		<script
+				type="text/javascript"
+				src="{{ url_for('static', filename='index.js') }}"
+		></script>
+	</body>
 </html>
