@@ -185,3 +185,35 @@ body{
 	padding: 5px;
 	margin-top: 40%;
 }
+#add_note{
+    background-color: black;
+    position: relative;
+    top: 50px;
+    left: 30%;
+    height: 300px;
+    width: 40%;
+    color: white;
+    border-radius: 10px;
+    font-size: 20px;
+	padding: 5px;
+    text-align:center;
+    color:orange;
+}
+button[type=submit]{
+	color:black;
+	cursor: pointer;
+	background: #ccc;
+	background: linear-gradient(#ddd 0, #eee 100%);
+	border: 1px solid #ccc;
+	line-height: 32px;
+	font-size: 20px;
+	padding: 0 25px;
+	border-radius: 3px;
+	width: 40%;
+	height: 50px;
+}
+#noteContent{
+    width: 80%;
+	margin-left: 10%;
+	resize: none;
+}
