@@ -49,18 +49,19 @@
 	</div>
 
 <!-- tresc pojedynczej notatki -->
-	<div id="notes">
+	<div id="notes_container">
 		{% for Note in all_notes %}
 			<div class="note">
 				<button type="button" class="close" onclick="deleteNote({{ Note.note_id }})">
 					<span aria-hidden="true">&times;</span>
 				</button>
 				<p class="title">{{ Note.note_id }}</p>
-				<p class="title">{{ Note.creation_date }}</p>
 				<div class="line"></div>
 				<div class="content_container">
 					<p class="content">{{ Note.content }}</p>
+					<p class="note_date">{{ Note.creation_date }}</p>
 				</div>
+
 			</div>
 		{% endfor %}
 	</div>

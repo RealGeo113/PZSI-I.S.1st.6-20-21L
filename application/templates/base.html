@@ -28,13 +28,13 @@
 				<img src="../static/images/banner.png" style="position:relative;height:200px; width:600px">
 			</a>
 			{% if user.is_authenticated %}
-				<a id="home" href="/"><button class="button1">Strona główna</button></a>
-				<a id="rooms" href="/rooms"><button class="button1">Lista pokoi</button></a>
-				<a id="notes" href="/notes"><button class="button1">Notatki</button></a>
-				<a id="logout" href="/logout"><button class="button1">Wyloguj</button></a>
+				<a id="home" href="/"><button class="header_button">Strona główna</button></a>
+				<a id="rooms" href="/rooms"><button class="header_button">Lista pokoi</button></a>
+				<a id="notes" href="/notes"><button class="header_button">Notatki</button></a>
+				<a id="logout" href="/logout"><button class="header_button">Wyloguj</button></a>
 			{% else %}
-				<a id="login" href="/login"><button class="button1">Zaloguj się</button></a>
-				<a id="signUp" href="/sign-up"><button class="button1">Zarejestruj się</button></a>
+				<a id="login" href="/login"><button class="header_button">Zaloguj się</button></a>
+				<a id="signUp" href="/sign-up"><button class="header_button">Zarejestruj się</button></a>
 			{% endif %}
 		</div>
 

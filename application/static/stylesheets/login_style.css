@@ -19,7 +19,7 @@ body{
 
 #users
 {
-   
+
     float: left;
     background-color: #1B1B1B;
     text-align: center;
@@ -37,7 +37,7 @@ body{
     text-align: center;
     font-size: 20px;
     height: 200px;
-    width: 100%; 
+    width: 100%;
 
 }
 
@@ -45,11 +45,14 @@ body{
 {
     background-color: black;
     position: relative;
-    top: 230px;
-    left: 35%;
-    height: 200px;
-    width: 30%;
+    top: 150px;
+    left: 30%;
+    height: 300px;
+    width: 40%;
     color: white;
+    border-radius: 10px;
+    font-size: 20px;
+	padding: 5px;
 }
 
 #login
@@ -60,11 +63,10 @@ body{
 #wyslij
 {
    align-items: center;
-   
 }
 
-textarea 
-{   
+textarea
+{
 
     position: absolute;
     top: 20px;
@@ -104,7 +106,7 @@ textarea
     color: orange;
 }
 
-.button 
+.button
 {
     position: relative;
     border: none;
@@ -118,30 +120,30 @@ textarea
 }
 
 
-.button1 
+.button1
 {
     float: right;
-    background-color: white; 
-    color: black; 
+    background-color: white;
+    color: black;
     border: 5px solid #f8a100;
 }
-  
-.button1:hover 
+
+.button1:hover
 {
     background-color: #f8a100;
     color: white;
 }
 
-.button2 
+.button2
 {
     top: 60px;
     left: 300px;
-    background-color: white; 
-    color: black; 
+    background-color: white;
+    color: black;
     border: 5px solid #f8a100;
 }
-  
-.button2:hover 
+
+.button2:hover
 {
     background-color: #f8a100;
     color: white;
@@ -149,11 +151,18 @@ textarea
 button[type=submit]{
 	color:black;
 	cursor: pointer;
-	background: #ccc; 
-	background: linear-gradient(#ddd 0, #eee 100%); 
-	border: 1px solid #ccc; 
-	line-height: 32px; 
-	font-size: 14px;
+	background: #ccc;
+	background: linear-gradient(#ddd 0, #eee 100%);
+	border: 1px solid #ccc;
+	line-height: 32px;
+	font-size: 22px;
 	padding: 0 25px;
 	border-radius: 3px;
+	width: 30%;
+	height: 50px;
+}
+#email,#password{
+	width: 60%;
+	height: 40px;
+	margin-left: 20%;
 }
