@@ -6,3 +6,10 @@ venv
 .idea
 __pycache__
 migrations
+application/__init__.py
+
+config.py
+
+requirements.txt
+
+application/dev_pinpoint.db
