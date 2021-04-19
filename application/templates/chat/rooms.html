@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/rooms_style.css') }}"/>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#X').click(function() {
+                $('#password_container').css("display","none");
+            });
+
+            $('.join_button').click(function() {
+                $('#password_container').css("display","inherit");
+            });
+
+        });
+
+        function show_password() {
+            var x = document.getElementById("pass");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+
+        function check_pass(){
+            var x = document.getElementById("pass").value;
+            if (x == "haslo"){
+                window.location="../chat/chat.html";;
+            }else{
+                alert("Błędne hasło");
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block title %}Rooms{% endblock %}
+
+{% block content %}
+
+    <div id="buttons">
+        <a href="/add-room">
+            <div class="button">
+                <p>Utwórz pokój</p>
+            </div>
+        </a>
+    </div>
+    <div id="list">
+        <table class="list_table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nazwa</th>
+                    <th>Właściciel</th>
+                    <th>Ilość osób</th>
+                    <th>Limit</th>
+                    <th>ID właściciela</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for Room in all_rooms %}
+                <tr>
+                    <td>{{ Room.room_id }}</td>
+                    <td>{{ Room.roomname }}</td>
+                    <td>{{ Room.roomtype }}</td>
+                    <td>{{ Room.accesstype }}</td>
+                    <td>{{ Room.user_limit }}</td>
+                    <td>{{ Room.owner_id }}</td>
+                    <td><button class="join_button">DOŁĄCZ</button></td>
+                    <td><button type="button" class="close" onclick="deleteRoom({{ Room.room_id }})">
+                        <span aria-hidden="true">&times;</span>
+                    </button></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="password_container">
+        <div id="password_window">
+            <button id="X">x</button>
+            <p id="pass_label">Hasło:</p>
+            <input type="password" id="pass" name="pass" onkeydown = "if (event.keyCode == 13) document.getElementById('join_room').click()">
+            <button id="show_pass" onclick="show_password()">👁️</button>
+            <button id="join_room" onclick="check_pass()">Dołącz</button>
+        </div>
+    </div>
+
+{% endblock %}
