@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, url_for
 from flask_login import login_required, current_user
-from .models import db, User, Room, Note
+from .models import db, User, Room, Note, UserRelation
 
+from pprint import pprint
 
 # tutaj sa tworzone Routes - czyli podstrony na ktore serwer ma kierowac zapytanie
 views = Blueprint('views', __name__)
@@ -40,3 +41,34 @@ def notes():
     all_notes = Note.query.all()
 
     return render_template("notes/notes.html", user=current_user, all_notes=all_notes)
+
+@views.route('/friends', methods=['GET', 'POST'])
+@login_required
+def friends():
+    """
+    :return: list of all user relations
+    """
+    all_relations = UserRelation.query.all()
+    return render_template("friends/friends.html", user=current_user, all_relations=all_relations)
+
+@views.route('/black-list', methods=['GET', 'POST'])
+@login_required
+def blocked():
+    """
+    :return: list of all user relations
+    """
+    all_relations = UserRelation.query.all()
+    return render_template("friends/blocked.html", user=current_user, all_relations=all_relations)
+
+@views.route('/users', methods=['GET', 'POST'])
+@login_required
+def users():
+    """
+    :return: list of all users
+    """
+
+    user_list = User.query.all()
+
+    relations = UserRelation.query.all()
+    return render_template("users/users.html", user=current_user, users=user_list, relations=relations)
+

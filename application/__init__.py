@@ -7,8 +7,8 @@ from .models import db
 # inicjalizacja flaska
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('config.DevConfig')
-    # app.config.from_object('config.ProdConfig')
+    # app.config.from_object('config.DevConfig')
+    app.config.from_object('config.ProdConfig')
 
     db.init_app(app)
     
@@ -19,12 +19,15 @@ def create_app():
     from .chat import chat
     from .notes import notes
     from .models import User
+    from .users import users
+    from .friends import friends
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(chat, url_prefix='/')
     app.register_blueprint(notes, url_prefix='/')
-
+    app.register_blueprint(users, url_prefix='/')
+    app.register_blueprint(friends, url_prefix='/')
     # zaimportuj modele z bazy danych
     # jesli jeszcze nie ma stworzonej bazy danych, to ja utworz
     # ale tylko w przypadku przyjecia konfiguracji Dev
