@@ -1,27 +1,53 @@
 *{
 	margin: 0;
 	padding: 0;
+	box-sizing: border-box;
 }
 html{
-	position: relative;
+
 }
 body{
 	background-color: #f3f3f3;
 	margin: 0;
 }
-#header{
-	position:relative;
-	height:200px;
+header{
+	height:auto;
 	width:100%;
 	background-color:black;
+	;
+}
+#header-container{
+	display: grid;
+	grid-template-rows: 200px 50px;
+
+}
+#header-first-row{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+#logo{
+	width: 600px;
+	height: 200px;
+}
+
+#menu{
+
+}
+
+#username-container{
+	width: 100%;
+	text-align: center;
+}
+
+#username{
+	color: white;
 }
 #buttons{
-	position: relative;
 	min-height: 100px;
 	width: 100%;
 }
 #center-text{
-	position: relative;
 	min-height: 300px;
 	width: 100%;
 	text-align: center;
@@ -29,7 +55,6 @@ body{
 	padding-top:30px;
 }
 .home_button{
-	position: relative;
 	min-height: 70px;
 	width: 47%;
 	float: left;
@@ -46,7 +71,6 @@ body{
 	color:white;
 }
 .button{
-	position: relative;
 	border: none;
 	padding: 16px 32px;
 	text-align: center;
@@ -57,7 +81,6 @@ body{
 	cursor: pointer;
 }
 .header_button{
-	position: relative;
 	padding: 16px 32px;
 	text-align: center;
 	display: inline-block;
@@ -72,7 +95,6 @@ body{
 }
 
 .header_button:hover{
-	position: relative;
 	padding: 16px 32px;
 	text-align: center;
 	display: inline-block;
@@ -82,4 +104,8 @@ body{
 	cursor: pointer;
 	background-color: #f8a100;
 	color: white;
+}
+
+#content{
+	padding: 10px;
 }

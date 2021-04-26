@@ -17,11 +17,47 @@ function deleteNote(note_id){
 }
 
 function editNote(note_id){
-    fetch("/edit-note", {
+    fetch("/edit_note/", {
         method: "POST",
         body: JSON.stringify({note_id: note_id}),
     }).then((_res) => {
-        window.location.href = "/add-note";
+        window.location.href = "/edit-note/" + note_id;
+    });
+}
+
+function addUser(user_id){
+    fetch("/add-user", {
+        method: "POST",
+        body: JSON.stringify({user_id: user_id}),
+    }).then((_res) => {
+        window.location.href = "/users";
+    });
+}
+
+function acceptUser(relation_id){
+    fetch("/accept-user", {
+        method: "POST",
+        body: JSON.stringify({relation_id: relation_id}),
+    }).then((_res) => {
+        window.location.href = "/friends";
+    });
+}
+
+function declineUser(relation_id){
+    fetch("/decline-user", {
+        method: "POST",
+        body: JSON.stringify({relation_id: relation_id}),
+    }).then((_res) => {
+        window.location.href = "/users";
+    });
+}
+
+function blockUser(relation_id){
+    fetch("/block-user", {
+        method: "POST",
+        body: JSON.stringify({relation_id: relation_id}),
+    }).then((_res) => {
+        window.location.href = "/friends";
     });
 }
 
