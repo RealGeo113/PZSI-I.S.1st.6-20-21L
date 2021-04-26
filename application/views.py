@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, url_for
+from flask import Blueprint, render_template, url_for, request
 from flask_login import login_required, current_user
-from .models import db, User, Room, Note, UserRelation
-
+from .models import db, User, Room, Note, UserRelation, Message
 from pprint import pprint
+
 
 # tutaj sa tworzone Routes - czyli podstrony na ktore serwer ma kierowac zapytanie
 views = Blueprint('views', __name__)
@@ -17,6 +17,7 @@ def home():
     # ktora korzysta z base.html
     # jedynie zmienia bloki w base.html na swoje
     # jest to duze ulatwienie i oszczednosc czasu
+
     return render_template("home.html", user=current_user)
 
 
@@ -41,6 +42,26 @@ def notes():
     all_notes = Note.query.all()
 
     return render_template("notes/notes.html", user=current_user, all_notes=all_notes)
+
+
+
+@views.route('/messages', methods=['GET', 'POST'])
+@login_required
+def messages():
+    """
+    :return: list of all messages
+    """
+    all_messages = Message.query.all()
+
+    return render_template("chat/history.html", user=current_user, messages=all_messages)
+
+
+@views.route('/chatroom/<room_id>', methods=['GET', 'POST'])
+@login_required
+def chatroom(room_id):
+    all_messages = Message.query.all()
+
+    return render_template("chat/chatroom.html", user=current_user, room_id=room_id)
 
 @views.route('/friends', methods=['GET', 'POST'])
 @login_required
@@ -71,4 +92,5 @@ def users():
 
     relations = UserRelation.query.all()
     return render_template("users/users.html", user=current_user, users=user_list, relations=relations)
+
 

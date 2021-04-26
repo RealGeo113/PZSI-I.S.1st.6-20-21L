@@ -42,6 +42,7 @@ def edit_note():
 @notes.route('/delete-note', methods=['GET', 'POST'])
 def delete_note():
     note = json.loads(request.data)
+    print(note)
     note_id = note['note_id']
     note = Note.query.get(note_id)
     if note:
@@ -50,5 +51,8 @@ def delete_note():
             db.session.commit()
 
             flash('Notatka została pomyślnie usunięta.', category='success')
+
+    # response = jsonify({})
+    # print(response)
 
     return jsonify({})

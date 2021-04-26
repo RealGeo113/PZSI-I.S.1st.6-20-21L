@@ -1,4 +1,4 @@
-from socket import AF_INET, socket, SOCK_STREAM
+from socket import AF_INET, socket, SOCK_STREAM, gethostbyname, gethostname
 from threading import Thread
 import time
 from person import Person
@@ -16,6 +16,8 @@ BUFSIZ = 512
 
 # ZMIENNE GLOBALNE
 persons = []
+SERVER = socket(AF_INET, SOCK_STREAM)
+SERVER.bind(ADDR) # przygotuj serwer
 
 def broadcast(msg, name):
     """
@@ -26,7 +28,10 @@ def broadcast(msg, name):
     """
     for person in persons:
         client = person.client
-        client.send(bytes(name + ": ", "utf8") + msg)
+        try:
+            client.send(bytes(name, "utf8") + msg)
+        except Exception as e:
+            print("[EXCEPTION] in broadcast", e)
 
 
 # tworzy obiekty klientow
@@ -35,26 +40,32 @@ def broadcast(msg, name):
 def client_communication(person):
     """
     Wątek przechwytujący wszystkie wiadomości od klienta.
-    :param client: socket
+    :param Person: person
     :return: None
     """
     client = person.client
-    addr = person.addr
 
     # get persons name
     name = client.recv(BUFSIZ).decode("utf8")
-    msg = f"{name} dołączył do pokoju!"
-    broadcast(msg)
+    person.set_name(name)
+
+    msg = bytes(f"{name} dołączył do pokoju!", "utf8")
+    broadcast(msg, "") # rozglaszaj wiadomość powitalna
 
     while True:
         msg = client.recv(BUFSIZ)
-        if msg != bytes("{quit}", "utf8"):
-            client.send(bytes("{quit}", "utf8"))
-            client.close()
 
+        if msg == bytes("{quit}", "utf8"):
+            client.close()
             persons.remove(person)
+
+            broadcast(bytes(f"{name} opuścił chat...", "utf8"), "")
+            print(f"[DISCONNECTED] {name} rozłączył się.")
+            break
         else:
-            client.send(msg)
+            broadcast(msg, name + ": ")
+            print(f"{name}: ", msg.decode("utf8"))
+
 
 def wait_for_connection():
     """
@@ -62,25 +73,19 @@ def wait_for_connection():
     :param SERVER: SOCKET
     :return:
     """
-    run = True
-    while run:
+    while True:
         try:
             client, addr = SERVER.accept()
             person = Person(addr, client)
             persons.append(person)
+
             print(f"[CONNECTION] {addr} połączył się z serwerem. Czas: {time.time()}")
             Thread(target=client_communication, args=(person,)).start()
         except Exception as e:
-            print("[FAILURE]", e)
-            run = False
+            print("[EXCEPTION] in wait_for_connection", e)
+            break
 
     print("[ERROR] Błąd serwera.")
-
-
-
-
-SERVER = socket(AF_INET, SOCK_STREAM)
-SERVER.bind(ADDR)
 
 
 if __name__ == "__main__":
