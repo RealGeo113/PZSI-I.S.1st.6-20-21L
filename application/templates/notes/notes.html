@@ -37,7 +37,8 @@ zakomentowane tymczasowo elementy majace wplyw na dzialanie js'a
 
 <!-- tresc pojedynczej notatki -->
 	<div id="notes_container">
-		{% for Note in user.notes %}
+		{% for Note in all_notes %}
+        {% if Note.user_id == current_user.user_id %}
 			<div class="note">
 				<button type="button" class="close" onclick="deleteNote({{ Note.note_id }})">
 					<span aria-hidden="true">&times;</span>
@@ -48,8 +49,8 @@ zakomentowane tymczasowo elementy majace wplyw na dzialanie js'a
 					<p class="content">{{ Note.content }}</p>
 					<p class="note_date">{{ Note.creation_date }}</p>
 				</div>
-
 			</div>
+            {% endif %}
 		{% endfor %}
 	</div>
 

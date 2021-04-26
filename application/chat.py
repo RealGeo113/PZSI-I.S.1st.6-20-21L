@@ -19,22 +19,27 @@ def add_room():
         accesstype = request.form.get('accesstype')
         owner_id = current_user.user_id
 
-        room = Room.query.filter_by(roomname=roomname).first()
-        if room:
-            flash('Pokój o podanej nazwie już istnieje!', category='error')
+        if roomname != '':
+            room = Room.query.filter_by(roomname=roomname).first()
+            if room:
+                flash('Pokój o podanej nazwie już istnieje!', category='error')
+            else:
+                if user_limit == '':
+                    user_limit = 2
+                new_room = Room(roomname=roomname,
+                                password=password,
+                                roomtype=roomtype,
+                                user_limit=user_limit,
+                                accesstype=accesstype,
+                                owner_id=owner_id)
+                db.session.add(new_room)
+                db.session.commit()
+
+                flash('Pokój został utworzony!', category='success')
+
+                return redirect(url_for('views.rooms'))
         else:
-            new_room = Room(roomname=roomname,
-                            password=password,
-                            roomtype=roomtype,
-                            user_limit=user_limit,
-                            accesstype=accesstype,
-                            owner_id=owner_id)
-            db.session.add(new_room)
-            db.session.commit()
-
-            flash('Pokój został utworzony!', category='success')
-
-            return redirect(url_for('views.rooms'))
+            flash('Podaj nazwę pokoju!', category='error')
 
     return render_template("chat/add_room.html", user=current_user)
 
