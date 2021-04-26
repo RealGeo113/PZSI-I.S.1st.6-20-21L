@@ -4,24 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/notes_style.css') }}"/>
 {% endblock %}
 
-<!-- wrzucenie skryptu wyswietlajacego popup do base -->
-{% block scripts %}
-	<script>
-		$(document).ready(function() {
-			$('#X').click(function() {
-				$('#add_note_container').css("display","none");
-			});
-
-			$('#note_button').click(function() {
-				$('#add_note_container').css("display","inherit");
-			});
-
-		});
-	</script>
-{% endblock %}
-
 {% block title %}Notes{% endblock %}
-
 
 {% block content %}
 
@@ -39,18 +22,22 @@
 		</div>
 	</div>
 
-<!-- guziczek od dodawania notatek -->
+<!--
+guziczek od dodawania notatek
+zakomentowane tymczasowo elementy majace wplyw na dzialanie js'a
+-->
 	<div id="buttons">
         <a href="/add-note">
+{#            <div class="button" id="note_button" onclick="showAddNoteWindow()">#}
             <div class="button" id="note_button">
-			    <p>Dodaj notatkę</p>
+                    <p>Dodaj notatkę</p>
 		    </div>
-        </a>
+       </a>
 	</div>
 
 <!-- tresc pojedynczej notatki -->
 	<div id="notes_container">
-		{% for Note in all_notes %}
+		{% for Note in user.notes %}
 			<div class="note">
 				<button type="button" class="close" onclick="deleteNote({{ Note.note_id }})">
 					<span aria-hidden="true">&times;</span>

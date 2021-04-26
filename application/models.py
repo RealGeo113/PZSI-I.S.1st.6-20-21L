@@ -6,6 +6,7 @@
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 
 db = SQLAlchemy()
@@ -70,10 +71,13 @@ class Message(db.Model):
     message_id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    is_saved = db.Column(db.Boolean)
+    is_saved = db.Column(db.Boolean, default=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 # prywatna wiadomosc wysylana bezposrednio miedzy uzytkownikami
@@ -130,6 +134,9 @@ class Participant(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 # lista zablokowanych uzytkownikow w danym pokoju
 class BlockedParticipant(db.Model):

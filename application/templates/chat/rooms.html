@@ -4,39 +4,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/rooms_style.css') }}"/>
 {% endblock %}
 
-{% block scripts %}
-    <script>
-        $(document).ready(function() {
-            $('#X').click(function() {
-                $('#password_container').css("display","none");
-            });
-
-            $('.join_button').click(function() {
-                $('#password_container').css("display","inherit");
-            });
-
-        });
-
-        function show_password() {
-            var x = document.getElementById("pass");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
-            }
-        }
-
-        function check_pass(){
-            var x = document.getElementById("pass").value;
-            if (x == "haslo"){
-                window.location="../chat/chat.html";;
-            }else{
-                alert("Błędne hasło");
-            }
-        }
-    </script>
-{% endblock %}
-
 {% block title %}Rooms{% endblock %}
 
 {% block content %}
@@ -71,7 +38,8 @@
                     <td>{{ Room.accesstype }}</td>
                     <td>{{ Room.user_limit }}</td>
                     <td>{{ Room.owner_id }}</td>
-                    <td><button class="join_button">DOŁĄCZ</button></td>
+{#                    <td><button class="join_button" onclick="showJoinRoomWindow()">DOŁĄCZ</button></td>#}
+                    <td><a href="/chatroom/{{ Room.room_id }}/enter">DOŁĄCZ</a></td>
                     <td><button type="button" class="close" onclick="deleteRoom({{ Room.room_id }})">
                         <span aria-hidden="true">&times;</span>
                     </button></td>
@@ -85,8 +53,8 @@
             <button id="X">x</button>
             <p id="pass_label">Hasło:</p>
             <input type="password" id="pass" name="pass" onkeydown = "if (event.keyCode == 13) document.getElementById('join_room').click()">
-            <button id="show_pass" onclick="show_password()">👁️</button>
-            <button id="join_room" onclick="check_pass()">Dołącz</button>
+            <button id="show_pass" onclick="showPassword()">👁️</button>
+            <button id="join_room" onclick="checkPassword()">Dołącz</button>
         </div>
     </div>
 

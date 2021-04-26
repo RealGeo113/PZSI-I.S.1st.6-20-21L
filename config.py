@@ -16,6 +16,7 @@ class Config:
     SECRET_KEY = environ.get('SECRET_KEY')
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
+    SERVER = environ.get('SERVER')
 
     # database
     SQLALCHEMY_TRACK_MODIFICATIONS = False
