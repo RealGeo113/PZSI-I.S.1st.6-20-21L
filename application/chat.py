@@ -9,6 +9,7 @@ chat = Blueprint('chat', __name__)
 
 MSG_LIMIT = 20
 
+
 @chat.route('/add-room', methods=['GET', 'POST'])
 def add_room():
     if request.method == 'POST':
@@ -69,20 +70,31 @@ def enter_chatroom(room_id):
         user_id = current_user.user_id
         room_id = int(room_id)
 
-        new_participant = Participant(user_id=user_id,
-                                      room_id=room_id)
-        db.session.add(new_participant)
-        db.session.commit()
+        room = Room.query.filter_by(room_id=room_id).first()
+        participants = Participant.query.filter_by(room_id=room_id).all()
 
-        # flash('Wejście do pokoju zakończone pomyślnie.', category='success')
+        print(len(participants))
 
-        new_participantJSON = new_participant.as_dict()
-        session["participant"] = new_participantJSON
-        session["room_id"] = room_id
+        if len(participants) < room.user_limit:
 
-        return redirect(url_for('views.chatroom', room_id=room_id))
+            new_participant = Participant(user_id=user_id,
+                                          room_id=room_id)
+            db.session.add(new_participant)
+            db.session.commit()
 
-    return render_template("chat/chatroom.html", user=current_user, room_id=room_id, **{"session": session})
+            # flash('Wejście do pokoju zakończone pomyślnie.', category='success')
+
+            new_participantJSON = new_participant.as_dict()
+            session["participant"] = new_participantJSON
+            session["room_id"] = room_id
+
+            # return redirect(url_for('views.chatroom', room_id=room_id))
+            return render_template("chat/chatroom.html", user=current_user, room_id=room_id, **{"session": session})
+
+        else:
+            flash('Pokój jest pełny', category='error')
+            return redirect(url_for('views.rooms'))
+
 
 
 @chat.route('/chatroom/<room_id>/leave', methods=['GET', 'POST'])

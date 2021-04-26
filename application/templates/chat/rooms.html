@@ -23,8 +23,8 @@
                     <th>Nazwa</th>
                     <th>Właściciel</th>
                     <th>Ilość osób</th>
-                    <th>Limit</th>
-                    <th>ID właściciela</th>
+                    <th>Typ pokoju</th>
+                    <th>Dostęp</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -32,17 +32,41 @@
             <tbody>
             {% for Room in all_rooms %}
                 <tr>
-                    <td>{{ Room.room_id }}</td>
+                    <td>{{ loop.index }}</td>
                     <td>{{ Room.roomname }}</td>
+                    <td>
+                        {% for User in users %}
+                            {% if Room.owner_id == User.user_id %}
+                                {{ User.username }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% set counter= {'value': 0} %}
+                        {% for Participant in participants %}
+                            {% if Participant.room_id == Room.room_id %}
+                                {%if counter.update({'value' : counter.value + 1}) %}{% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ counter.value }}/{{ Room.user_limit }}
+                    </td>
                     <td>{{ Room.roomtype }}</td>
                     <td>{{ Room.accesstype }}</td>
-                    <td>{{ Room.user_limit }}</td>
-                    <td>{{ Room.owner_id }}</td>
 {#                    <td><button class="join_button" onclick="showJoinRoomWindow()">DOŁĄCZ</button></td>#}
-                    <td><a href="/chatroom/{{ Room.room_id }}/enter">DOŁĄCZ</a></td>
-                    <td><button type="button" class="close" onclick="deleteRoom({{ Room.room_id }})">
-                        <span aria-hidden="true">&times;</span>
-                    </button></td>
+                    <td>
+                        {% if Room.user_limit > counter.value %}
+                            <a href="/chatroom/{{ Room.room_id }}/enter">DOŁĄCZ</a>
+                        {% else %}
+                            Pokój pełny
+                        {% endif %}
+                    </td>
+                    <td>
+                    {% if user.user_id == Room.owner_id %}
+                        <button type="button" class="close" onclick="deleteRoom({{ Room.room_id }})">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

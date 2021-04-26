@@ -154,7 +154,9 @@
                 type="text/javascript"
                 src="{{ url_for('static', filename='socketio.js') }}"
         ></script>
-
+        <script type=text/javascript>
+          $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        </script>
         <!--
         musialem dolaczyc te skrypty tutaj
         nie chcialo dzialac kiedy podpinalem w index.js
