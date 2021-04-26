@@ -1,4 +1,4 @@
-var socket = io.connect('http://' + document.domain + ':' + location.port);
+let socket = io.connect('http://' + document.domain + ':' + location.port);
 
 socket.on("connect", async function () {
     var usr_name = await loadName();
@@ -24,6 +24,7 @@ socket.on("connect", async function () {
         socket.emit("event", {
             message: user_input,
             name: user_name,
+            type: 1,
             room_id: room_id
         });
     });
@@ -39,6 +40,3 @@ socket.on("disconnect", async function (msg) {
 socket.on("message response", function (msg) {
     addMessages(msg, true);
 });
-
-
-

@@ -71,17 +71,10 @@ async function addMessages(msg, scroll) {
             var n = date;
         }
         var global_name = await loadName();
+        var content;
 
-        var content =
-            '<div class="container">' +
-            '<b style="color:#000" class="right">' +
-            msg.name +
-            "</b><p>" +
-            msg.message +
-            '</p><span class="time-right">' +
-            n +
-            "</span></div>";
-        if (global_name == msg.name) {
+        if(msg.type == 1){
+            if (global_name == msg.name) {
             content =
                 '<div class="container darker">' +
                 '<b style="color:#000" class="left">' +
@@ -91,6 +84,22 @@ async function addMessages(msg, scroll) {
                 '</p><span class="time-left">' +
                 n +
                 "</span></div>";
+            }else{
+                content =
+                    '<div class="container">' +
+                    '<b style="color:#000" class="right">' +
+                    msg.name +
+                    "</b><p>" +
+                    msg.message +
+                    '</p><span class="time-right">' +
+                    n +
+                    "</span></div>";
+            }
+        }
+        if(msg.type == 2){
+            content =   '<div class="user_joined">' +
+                        '<p>' + msg.name + ' dołączył do pokoju</p>' +
+                        '</div>';
         }
         // update div
         var messageDiv = document.getElementById("messages");

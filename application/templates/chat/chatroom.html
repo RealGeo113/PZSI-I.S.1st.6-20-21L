@@ -45,6 +45,7 @@
     <div>
     <a href="/chatroom/{{ room_id }}/leave">Leave</a>
     </div>
+
     <div id="chat-container">
         <div class="container">
             <div id="messages" class="overflow-auto msgs" style="overflow-y: scroll; height:500px;">
@@ -62,31 +63,38 @@
             <h5>Użytkownicy w pokoju</h5>
 
             <div id="room_participants">
-                    <script type=text/javascript>
-                        let users = [];
-                        var participants = document.getElementById('room_participants');
-                        setInterval(
-                            function() {
-                                $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {
-                                    updateUsers(data);
-                                });
-                                return false;
-                            }, 1000);
 
-                        function updateUsers(userList){
-                            if(userList.length != users.length){
-                                users = userList;
-                                participants.innerHTML = '';
-                                for (let i = 0; i < users.length; i++){
-                                        let username = users[i];
-                                        let content = '<div class="user">' + username + '</div>';
-                                        participants.innerHTML += content;
-                                }
-                            }
-                        }
-                    </script>
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script type=text/javascript>
+    let users = [];
+    var participants = document.getElementById('room_participants');
+    setInterval(
+        function() {
+            $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {
+                updateUsers(data);
+            });
+            return false;
+        }, 1000);
+
+    function updateUsers(userList){
+        if(userList.length != users.length){
+            users = userList;
+            participants.innerHTML = '';
+            for (let i = 0; i < users.length; i++){
+                    let username = users[i];
+                    let content = '<div class="user">' + username + '</div>';
+                    participants.innerHTML += content;
+            }
+        }
+    }
+</script>
+<script>
+socket.emit('event', {message: '', name: '{{ user.username }}', type: 2, room_id: {{ room_id }} });
+</script>
 {% endblock %}
