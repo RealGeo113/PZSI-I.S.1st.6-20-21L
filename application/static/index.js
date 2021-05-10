@@ -101,6 +101,12 @@ async function addMessages(msg, scroll) {
                         '<p>' + msg.name + ' dołączył do pokoju</p>' +
                         '</div>';
         }
+
+        if(msg.type == 3){
+            content =   '<div class="user_left">' +
+                        '<p>' + msg.name + ' wyszedł z pokoju</p>' +
+                        '</div>';
+        }
         // update div
         var messageDiv = document.getElementById("messages");
         messageDiv.innerHTML += content;
@@ -118,6 +124,16 @@ async function loadName() {
         })
         .then(function (text) {
             return text["name"];
+        });
+}
+
+async function loadUserId() {
+    return await fetch("/user/get-user-id")
+        .then(async function (response) {
+            return await response.json();
+        })
+        .then(function (text) {
+            return text["user_id"];
         });
 }
 
@@ -185,7 +201,27 @@ function dateNow() {
     return cur_day + " " + hours + ":" + minutes;
 }
 
+async function sendNotification(user_id){
+    let sender_name = await loadName();
+    let sender_id = await loadUserId();
+    let room_id = await loadRoom();
 
+    socket.emit("notification", {sender_id: sender_id, sender_name: sender_name, receiver_id: user_id, room_id: room_id});
+}
+
+async function displayNotification(notification){
+    let user_id = await loadUserId();
+    if(notification.receiver_id == user_id){
+        let content =   "<div class='notification'><div class='notification-message'> Użytkownik <span class='username'>" + notification.sender_name + "</span> zaprasza cię do pokoju!</div><div class='notification-buttons'><a href='' onclick='discardNotification()'>Odrzuć</a><a href='/chatroom/" + notification.room_id + "/enter'>Akceptuj</a></div></div>";
+        $('.notification-container').append(content);
+        $('.notification-container').toggleClass('notification-visible');
+    }
+}
+
+function discardNotification(){
+    $('.notification-container').toggleClass('notification-visible');
+    $('.notification-container').innerHTML("");
+}
 
 
 

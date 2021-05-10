@@ -43,7 +43,7 @@
         <div class="col"><hr></div>
     </div>
     <div>
-    <a href="/chatroom/{{ room_id }}/leave">Leave</a>
+    <a href="/chatroom/{{ room_id }}/leave" onclick="leaveRoom()">Leave</a>
     </div>
 
     <div id="chat-container">
@@ -93,8 +93,15 @@
             }
         }
     }
-</script>
-<script>
-socket.emit('event', {message: '', name: '{{ user.username }}', type: 2, room_id: {{ room_id }} });
+
+    function enterRoom(){
+        socket.emit('event', {message: '', name: '{{ user.username }}', type: 2, room_id: {{ room_id }} });
+    }
+
+    function leaveRoom(){
+        socket.emit('event', {message: '', name: '{{ user.username }}', type: 3, room_id: {{ room_id }} });
+    }
+
+    enterRoom();
 </script>
 {% endblock %}
