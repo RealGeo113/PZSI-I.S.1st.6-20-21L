@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/rooms_style.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/history_style.css') }}"/>
 {% endblock %}
 
 {% block title %}History{% endblock %}
@@ -33,6 +33,9 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div id="messages">
+        <div id="messages_container"></div>
     </div>
 
 {% endblock %}

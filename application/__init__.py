@@ -7,8 +7,8 @@ from .models import db
 # inicjalizacja flaska
 def create_app():
     app = Flask(__name__)
-    # app.config.from_object('config.DevConfig')
-    app.config.from_object('config.ProdConfig')
+    app.config.from_object('config.DevConfig')
+    # app.config.from_object('config.ProdConfig')
 
     db.init_app(app)
     

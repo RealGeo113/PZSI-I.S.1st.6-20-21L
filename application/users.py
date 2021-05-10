@@ -21,33 +21,45 @@ def accept_user():
 
 @users.route('/decline-user', methods=['GET', 'POST'])
 def decline_user():
+    print('declining friend request');
     relation = json.loads(request.data)
     relation_id = relation['relation_id']
     if request.method == 'POST':
         relation = UserRelation.query.get(relation_id)
         relation.status = 2
 
+        db.session.commit()
+
     return jsonify({})
 
 
 @users.route('/block-user', methods=['GET', 'POST'])
 def block_user():
+    print('blocking user');
     relation = json.loads(request.data)
     relation_id = relation['relation_id']
     if request.method == 'POST':
         relation = UserRelation.query.get(relation_id)
         relation.status = 3
 
+        db.session.commit()
+
     return jsonify({})
 
 
 @users.route('/add-user', methods=['GET', 'POST'])
 def add_user():
+    print('adding user')
     user = json.loads(request.data)
     user_id = user['user_id']
     if request.method == 'POST':
-        relating_relation = UserRelation.query.filter_by(relating_user_id=current_user.user_id, related_user_id=user_id).first()
-        related_relation = UserRelation.query.filter_by(relating_user_id=user_id, related_user_id=current_user.user_id).first()
+        relating_relation = UserRelation.query.filter_by(
+            relating_user_id=current_user.user_id,
+            related_user_id=user_id).first()
+
+        related_relation = UserRelation.query.filter_by(
+            relating_user_id=user_id,
+            related_user_id=current_user.user_id).first()
 
         if relating_relation or related_relation:
             if relating_relation:

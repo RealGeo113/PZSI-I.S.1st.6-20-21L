@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, url_for, request
+from flask import Blueprint, render_template, url_for, request, jsonify
 from flask_login import login_required, current_user
-from .models import db, User, Room, Note, UserRelation, Message
+from .models import db, User, Room, Note, UserRelation, Message, Participant
 from pprint import pprint
+
 
 
 # tutaj sa tworzone Routes - czyli podstrony na ktore serwer ma kierowac zapytanie
@@ -29,8 +30,10 @@ def rooms():
     """
     all_rooms = Room.query.all()
     # print(all_rooms)
+    participants = Participant.query.all()
+    users = User.query.all()
 
-    return render_template("chat/rooms.html", user=current_user, all_rooms=all_rooms)
+    return render_template("chat/rooms.html", user=current_user, all_rooms=all_rooms, participants=participants, users=users)
 
 
 @views.route('/notes', methods=['GET', 'POST'])
@@ -93,4 +96,14 @@ def users():
     relations = UserRelation.query.all()
     return render_template("users/users.html", user=current_user, users=user_list, relations=relations)
 
+@views.route('/_get_participants/<room_id>', methods=['GET', 'POST'])
+def get_participants(room_id):
+    participants = Participant.query.filter_by(room_id=room_id).all()
+    users = []
+
+    for participant in participants:
+        user = User.query.filter_by(user_id=participant.user_id).first()
+        users.append(user.username)
+
+    return jsonify(users)
 

@@ -6,17 +6,6 @@
 html{
 	position: relative;
 }
-body{
-	background-color: #f3f3f3;
-	margin: 0;
-}
-#header{
-	position:relative;
-	height:200px;
-	width:100%;
-	background-color:black;
-}
-
 #users
 {
    

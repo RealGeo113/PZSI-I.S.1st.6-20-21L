@@ -5,16 +5,6 @@
 html{
 	position: relative;
 }
-body{
-	background-color: #f3f3f3;
-	margin: 0;
-}
-#header{
-	position:relative;
-	height:200px;
-	width:100%;
-	background-color:black;
-}
 #buttons{
 	position: relative;
 	min-height: 100px;
@@ -33,12 +23,12 @@ body{
 	position: relative;
 	width:10%;
 	height:250px;
-	background-color:black;
+	background-color: var(--secondary-color);
 	border-radius: 8px;
 	float: left;
 	margin:2.5%;
 	padding:10px;
-	color:white;
+	color:var(--font-color);
 	text-align: center;
 	max-height: 250px;
 	max-width: 500px;
@@ -58,7 +48,7 @@ body{
 .line{
 	width:230px;
 	height:5px;
-	background-color:white;
+	background-color: var(--primary-color);
 	border-radius: 8px;
 }
 .content{
@@ -71,8 +61,8 @@ body{
 	width: 50%;
 	float: left;
 	margin-top: 10px;
-	margin-left: 25%;
-	background-color:black;
+	margin-left: 25% !important;
+	background-color: var(--secondary-color);
 	border-radius: 8px;
 	cursor: pointer;
 }
@@ -80,7 +70,7 @@ body{
 	padding:15px;
 	font-size: 36px;
 	text-align: center;
-	color:white;
+	color: var(--font-color);
 }
 .button1{
 	position: relative;
@@ -92,7 +82,7 @@ body{
     transition-duration: 0.4s;
     cursor: pointer;
     float: right;
-    background-color: white;
+    background-color: var(--primary-color);
     color: black;
     border: 5px solid #f8a100;
 }
@@ -186,21 +176,19 @@ body{
 	margin-top: 40%;
 }
 #add_note{
-    background-color: black;
+    background-color: var(--secondary-color);
     position: relative;
     top: 50px;
     left: 30%;
     height: 300px;
     width: 40%;
-    color: white;
     border-radius: 10px;
     font-size: 20px;
 	padding: 5px;
     text-align:center;
-    color:orange;
 }
 button[type=submit]{
-	color:black;
+	color:black !important;
 	cursor: pointer;
 	background: #ccc;
 	background: linear-gradient(#ddd 0, #eee 100%);
@@ -208,12 +196,14 @@ button[type=submit]{
 	line-height: 32px;
 	font-size: 20px;
 	padding: 0 25px;
-	border-radius: 3px;
+	border-radius: .25rem;
 	width: 40%;
 	height: 50px;
+	float: none;
 }
 #noteContent{
     width: 80%;
 	margin-left: 10%;
 	resize: none;
+	background-color: #f3f3f3;
 }

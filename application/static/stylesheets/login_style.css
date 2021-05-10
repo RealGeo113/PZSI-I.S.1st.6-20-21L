@@ -1,22 +1,3 @@
-*{
-	margin: 0;
-	padding: 0;
-    color:orange
-}
-html{
-	position: relative;
-}
-body{
-	background-color: #f3f3f3;
-	margin: 0;
-}
-#header{
-	position:relative;
-	height:200px;
-	width:100%;
-	background-color:black;
-}
-
 #users
 {
 
@@ -43,13 +24,12 @@ body{
 
 #log
 {
-    background-color: black;
+    background-color: var(--secondary-color);
     position: relative;
     top: 50px;
     left: 30%;
     height: 300px;
     width: 40%;
-    color: white;
     border-radius: 10px;
     font-size: 20px;
 	padding: 5px;
@@ -123,7 +103,7 @@ textarea
 .button1
 {
     float: right;
-    background-color: white;
+    background-color: var(--secondary-color);
     color: black;
     border: 5px solid #f8a100;
 }
@@ -149,7 +129,6 @@ textarea
     color: white;
 }
 button[type=submit]{
-	color:black;
 	cursor: pointer;
 	background: #ccc;
 	background: linear-gradient(#ddd 0, #eee 100%);

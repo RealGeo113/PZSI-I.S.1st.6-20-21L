@@ -22,23 +22,80 @@
         .form button:hover,.form button:active,.form button:focus {
             background: #43A047;
         }
+
+        #chat-container{
+            display: grid;
+            grid-template-columns: auto 300px;
+        }
+
+        #messages{
+            min-width: 300px;
+        }
+
+        #room_participants_container{
+            padding: 10px;
+        }
+
     </style>
     <div class="row" style="padding-top:10px;" >
         <div class="col"><hr></div>
         <div class="col-auto"><p class="h3" align="center">Start Chatting</p></div>
         <div class="col"><hr></div>
     </div>
-    <div class="container">
-        <div id="messages" class="overflow-auto msgs" style="overflow-y: scroll; height:500px;">
-        </div>
-        <form id="msgForm" action="" method="POST" style="bottom:0; margin: 0% 0% 0% 0%;">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Message" aria-label="Message" id="msg">
-                <div class="input-group-append">
-                    <button class="btn btn-success" type="submit" id="sendBtn">Send</button>
-                </div>
-            </div>
-        </form>
+    <div>
+    <a href="/chatroom/{{ room_id }}/leave">Leave</a>
     </div>
 
+    <div id="chat-container">
+        <div class="container">
+            <div id="messages" class="overflow-auto msgs" style="overflow-y: scroll; height:500px;">
+            </div>
+            <form id="msgForm" action="" method="POST" style="bottom:0; margin: 0% 0% 0% 0%;">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Message" aria-label="Message" id="msg">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" type="submit" id="sendBtn">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="room_participants_container">
+            <h5>Użytkownicy w pokoju</h5>
+
+            <div id="room_participants">
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script type=text/javascript>
+        let users = [];
+        var participants = document.getElementById('room_participants');
+        setInterval(
+            function() {
+                $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {
+                    updateUsers(data);
+                });
+                return false;
+            }, 1000);
+
+        function updateUsers(userList){
+            if(userList.length != users.length){
+                users = userList;
+                participants.innerHTML = '';
+                for (let i = 0; i < users.length; i++){
+                        let username = users[i];
+                        let content = '<div class="user">' + username + '</div>';
+                        participants.innerHTML += content;
+                }
+            }
+        }
+    </script>
+
+    <script>
+        socket.emit('event', {message: '', name: '{{ user.username }}', type: 2, room_id: {{ room_id }} });
+    </script>
 {% endblock %}
