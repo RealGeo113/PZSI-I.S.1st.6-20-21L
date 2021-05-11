@@ -19,7 +19,6 @@ body{
 
 #users
 {
-   
     float: left;
     background-color: #1B1B1B;
     text-align: center;
@@ -64,8 +63,7 @@ body{
 }
 
 textarea 
-{   
-
+{
     position: absolute;
     top: 20px;
     left: 380px;

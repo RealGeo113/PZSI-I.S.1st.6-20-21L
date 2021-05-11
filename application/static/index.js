@@ -212,15 +212,24 @@ async function sendNotification(user_id){
 async function displayNotification(notification){
     let user_id = await loadUserId();
     if(notification.receiver_id == user_id){
-        let content =   "<div class='notification'><div class='notification-message'> Użytkownik <span class='username'>" + notification.sender_name + "</span> zaprasza cię do pokoju!</div><div class='notification-buttons'><a href='' onclick='discardNotification()'>Odrzuć</a><a href='/chatroom/" + notification.room_id + "/enter'>Akceptuj</a></div></div>";
+        let content =   "<div class='notification'><div class='notification-message'> Użytkownik <span class='username'>" + notification.sender_name + "</span> zaprasza cię do pokoju!</div><div class='notification-buttons'><a ><button class='btn btn-danger' onclick='discardNotification()'>Odrzuć</button></a><a href='/chatroom/" + notification.room_id + "/enter'><button class='btn btn-success'>Akceptuj</button></a></div></div>";
         $('.notification-container').append(content);
         $('.notification-container').toggleClass('notification-visible');
     }
+
+    setTimeout(function (){
+        let visible = $('.notification-container').hasClass('notification-visible');
+        if(visible){
+            $('.notification-container').toggleClass('notification-visible');
+        }
+
+        $('.notification-container').html("");
+    }, 15000);
 }
 
 function discardNotification(){
     $('.notification-container').toggleClass('notification-visible');
-    $('.notification-container').innerHTML("");
+    $('.notification-container').html("");
 }
 
 

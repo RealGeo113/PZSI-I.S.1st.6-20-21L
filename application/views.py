@@ -107,3 +107,14 @@ def get_participants(room_id):
 
     return jsonify(users)
 
+@views.route('/_get_users', methods=['GET', 'POST'])
+def get_users():
+    all_users = User.query.all()
+    user_list = []
+
+    for user in all_users:
+        data = {'username': user.username, 'user_id': user.user_id}
+        user_list.append(data)
+
+    return jsonify(user_list)
+

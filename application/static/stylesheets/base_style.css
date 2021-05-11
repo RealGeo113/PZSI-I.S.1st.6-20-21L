@@ -116,7 +116,7 @@ header{
 .notification-container{
 	position: fixed;
 	bottom: 0;
-	left: 0;
+	left: -150px;
 	width: 250px;
 	height: 150px;
 	background: rgba(0,0,0,0.1);
@@ -137,6 +137,7 @@ header{
 .notification-visible{
 	opacity: 1 !important;
 	visibility: visible !important;
+	left: 0;
 }
 
 .notification-container .username{
