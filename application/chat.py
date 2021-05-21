@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, session
-from flask_login import current_user, login_required
-from .models import db, User, Room, Message, Participant
+from flask_login import current_user
+from .models import db, Room, Message, Participant
 import json
 from datetime import datetime
 
@@ -75,7 +75,9 @@ def enter_chatroom(room_id):
 
         print(len(participants))
 
-        if len(participants) < room.user_limit:
+        check_for_duplicates = Participant.query.filter_by(room_id=room_id, user_id=user_id).all()
+
+        if len(participants) < room.user_limit and not check_for_duplicates:
 
             new_participant = Participant(user_id=user_id,
                                           room_id=room_id)
@@ -91,10 +93,12 @@ def enter_chatroom(room_id):
             # return redirect(url_for('views.chatroom', room_id=room_id))
             return render_template("chat/chatroom.html", user=current_user, room_id=room_id, **{"session": session})
 
+        elif check_for_duplicates:
+            return render_template("chat/chatroom.html", user=current_user, room_id=room_id, **{"session": session})
+
         else:
             flash('Pokój jest pełny', category='error')
             return redirect(url_for('views.rooms'))
-
 
 
 @chat.route('/chatroom/<room_id>/leave', methods=['GET', 'POST'])
@@ -117,6 +121,38 @@ def leave_chatroom(room_id):
     return render_template("chat/chatroom.html", user=current_user, room_id=room_id)
 
 
+@chat.route('/chatroom/<room_id>/kick/<user_id>', methods=['GET', 'POST'])
+def kick_from_chatroom(room_id, user_id):
+
+    user_id = int(user_id)
+    room_id = int(room_id)
+    participant = Participant.query.filter_by(user_id=user_id, room_id=room_id).first()
+
+    if participant:
+        db.session.delete(participant)
+        db.session.commit()
+
+        session["participant"] = None
+
+    return jsonify({})
+
+
+@chat.route('/chatroom/<room_id>/leave_json', methods=['GET', 'POST'])
+def leave_chatroom_json(room_id):
+
+    user_id = current_user.user_id
+    room_id = int(room_id)
+    participant = Participant.query.filter_by(user_id=user_id, room_id=room_id).first()
+
+    if participant:
+        db.session.delete(participant)
+        db.session.commit()
+
+        session["participant"] = None
+
+    return jsonify({})
+
+
 @chat.route('/get-messages')
 def get_messages():
     return get_all_messages(to_json=True)
@@ -132,6 +168,16 @@ def get_name():
     return jsonify(data)
 
 
+@chat.route('/user/get-user-id')
+def get_user_id():
+    data = {"user_id": ""}
+
+    if current_user.is_authenticated:
+        data = {"user_id": current_user.user_id}
+
+    return jsonify(data)
+
+
 @chat.route('/room/get-id')
 def get_room_id():
     data = {"room_id": ""}
@@ -140,6 +186,11 @@ def get_room_id():
         data = {"room_id": session["room_id"]}
 
     return jsonify(data)
+
+
+@chat.route('/history')
+def history():
+    return render_template("chat/history.html", user=current_user)
 
 
 @chat.route('/history/user/<user_id>/messages')

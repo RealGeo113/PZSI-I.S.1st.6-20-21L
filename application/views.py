@@ -1,9 +1,6 @@
-from flask import Blueprint, render_template, url_for, request, jsonify
+from flask import Blueprint, render_template, jsonify
 from flask_login import login_required, current_user
 from .models import db, User, Room, Note, UserRelation, Message, Participant
-from pprint import pprint
-
-
 
 # tutaj sa tworzone Routes - czyli podstrony na ktore serwer ma kierowac zapytanie
 views = Blueprint('views', __name__)
@@ -29,7 +26,6 @@ def rooms():
     :return: list of all rooms
     """
     all_rooms = Room.query.all()
-    # print(all_rooms)
     participants = Participant.query.all()
     users = User.query.all()
 
@@ -45,7 +41,6 @@ def notes():
     all_notes = Note.query.all()
 
     return render_template("notes/notes.html", user=current_user, all_notes=all_notes)
-
 
 
 @views.route('/messages', methods=['GET', 'POST'])
@@ -66,6 +61,7 @@ def chatroom(room_id):
 
     return render_template("chat/chatroom.html", user=current_user, room_id=room_id)
 
+
 @views.route('/friends', methods=['GET', 'POST'])
 @login_required
 def friends():
@@ -75,6 +71,7 @@ def friends():
     all_relations = UserRelation.query.all()
     return render_template("friends/friends.html", user=current_user, all_relations=all_relations)
 
+
 @views.route('/black-list', methods=['GET', 'POST'])
 @login_required
 def blocked():
@@ -83,6 +80,7 @@ def blocked():
     """
     all_relations = UserRelation.query.all()
     return render_template("friends/blocked.html", user=current_user, all_relations=all_relations)
+
 
 @views.route('/users', methods=['GET', 'POST'])
 @login_required
@@ -96,14 +94,28 @@ def users():
     relations = UserRelation.query.all()
     return render_template("users/users.html", user=current_user, users=user_list, relations=relations)
 
+
 @views.route('/_get_participants/<room_id>', methods=['GET', 'POST'])
-def get_participants(room_id):
+def get_participants_name(room_id):
     participants = Participant.query.filter_by(room_id=room_id).all()
     users = []
 
     for participant in participants:
         user = User.query.filter_by(user_id=participant.user_id).first()
+        # users.append(user.user_id)
         users.append(user.username)
 
     return jsonify(users)
+
+
+@views.route('/_get_users', methods=['GET', 'POST'])
+def get_users():
+    all_users = User.query.all()
+    user_list = []
+
+    for user in all_users:
+        data = {'username': user.username, 'user_id': user.user_id}
+        user_list.append(data)
+
+    return jsonify(user_list)
 

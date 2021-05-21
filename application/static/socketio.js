@@ -40,3 +40,7 @@ socket.on("disconnect", async function (msg) {
 socket.on("message response", function (msg) {
     addMessages(msg, true);
 });
+
+socket.on("notification", function(notification){
+    displayNotification(notification);
+});

@@ -7,7 +7,14 @@
 {% block title %}History{% endblock %}
 
 {% block content %}
-
+    <div id="buttons">
+        <a id="rooms2" href="/history/user/{{ current_user.user_id }}/messages"><div class="home_button">
+            <p>Czat</p>
+        </div></a>
+        <a id="notes2" href="/history"><div class="home_button">
+            <p>Notatki</p>
+        </div></a>
+    </div>
     <div id="list">
         <table class="list_table">
             <thead>

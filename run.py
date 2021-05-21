@@ -24,6 +24,13 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
     socketio.emit('message response', json)
 
 
+@socketio.on('notification')
+def show_notification(json):
+    # data = dict(json)
+
+    socketio.emit('notification', json)
+
+
 # MAINLINE
 if __name__ == "__main__":  # start the web server
     socketio.run(app, debug=True, host=str(config.Config.SERVER))

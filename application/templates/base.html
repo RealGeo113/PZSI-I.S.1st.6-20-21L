@@ -75,68 +75,72 @@
 		<title>{% block title %}Home{% endblock %}</title>
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	</head>
-	<body>
-
-		<header>
-            <div id="header-container">
-                <div id="header-first-row">
-                    <div id="logo">
-                    <a href="/">
-                        <img src="../static/images/banner.png" style="position:relative;height:200px; width:600px">
-                    </a>
-                    </div>
-                    <div id="menu">
-                            {% if user.is_authenticated %}
-                                <a id="home" href="/"><button class="header_button">Strona główna</button></a>
-                                <a id="rooms" href="/rooms"><button class="header_button">Lista pokoi</button></a>
-                                <a id="friends" href="/friends"><button class="header_button">Lista znajomych</button></a>
-                                <a id="notes" href="/notes"><button class="header_button">Notatki</button></a>
-                                <a id="logout" href="/logout"><button class="header_button">Wyloguj</button></a>
-
-                            {% else %}
-                                <a id="login" href="/login"><button class="header_button">Zaloguj się</button></a>
-                                <a id="signUp" href="/sign-up"><button class="header_button">Zarejestruj się</button></a>
-                            {% endif %}
-                    </div>
-                </div>
-                <div id="username-container">
-                    {% if user.is_authenticated %}
-                        <div id="username">
-                            <span id="username"> Witaj {{ current_user.username }}!</span>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-		</header>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-
-                    {% if category == 'error' %}
-                        <div class="alert alert-danger alert-dismissable fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-success alert-dismissable fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    {% endif %}
-
-                {% endfor %}
+    <body>
+    <div id="header">
+        <a href="/" style="text-decoration: none;">
+            <img id="banner" style="position:relative;height:200px; width:600px;outline: none;" src="../static/images/light_banner.png" contenteditable/>
+        </a>
+        {% if user.is_authenticated %}
+            <div class="menu" id="menu_id">
+            <a id="logout" href="/logout"><button class="btn btn-light">Wyloguj</button></a>
+            <a id="rooms" href="/rooms"><button class="btn btn-light">Pokoje</button></a>
+            <a id="friends" href="/friends"><button class="btn btn-light">Lista znajomych</button></a>
+            <a id="online" href="/online-users"><button class="btn btn-light">Użytkownicy online</button></a>
+            <a id="friends" href="/history"><button class="btn btn-light">Historia</button></a>
+            <a id="notes" href="/notes"><button class="btn btn-light">Notatki</button></a>
+            <a id="home" href="/"><button class="btn btn-light">Strona główna</button></a>
+            {% if current_user.has_role('admin') %}
+                <a id="admin" href="/admin"><button class="btn btn-light">Panel administratorski</button></a>
             {% endif %}
-        {% endwith %}
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="menuFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        {% else %}
+            <div class="menu" id="menu_id">
+                <a id="login" href="/login"><button class="btn btn-light">Zaloguj się</button></a>
+                <a id="signUp" href="/sign-up"><button class="btn btn-light">Zarejestruj się</button></a>
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="menuFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        {% endif %}
+        <label class="theme-switch" for="chbox"/>
+        <input id="chbox" class="l" type="checkbox" checked/>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+
+                {% if category == 'error' %}
+                    <div class="alert alert-danger alert-dismissable fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="alert alert-success alert-dismissable fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
 		<div id="content">
 			{% block content %}
 			{% endblock %}
 		</div>
+
+        {% if user.is_authenticated %}
+            <div class="notification-container"></div>
+        {% endif %}
 
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
@@ -162,46 +166,77 @@
         -->
         <script>
 
-            function showAddNoteWindow(){
-                $(document).ready(function() {
-                    $('#X').click(function() {
-                        $('#add_note_container').css("display","none");
-                    });
+            const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+            const currentTheme = localStorage.getItem('theme');
+            const currentBanner = localStorage.getItem('banner');
+            var bannerColor = document.getElementById('banner');
 
-                    $('#note_button').click(function() {
-                        $('#add_note_container').css("display","inherit");
-                    });
-                });
-            }
+            if (currentTheme) {
+                document.documentElement.setAttribute('data-theme', currentTheme);
 
-            function showJoinRoomWindow() {
-                $(document).ready(function () {
-                    $('#X').click(function () {
-                        $('#password_container').css("display", "none");
-                    });
-
-                    $('.join_button').click(function () {
-                        $('#password_container').css("display", "inherit");
-                    });
-
-                });
-            }
-
-            function showPassword() {
-                var x = document.getElementById("pass");
-                if (x.type === "password") {
-                    x.type = "text";
-                } else {
-                    x.type = "password";
+                if (currentTheme === 'dark') {
+                    toggleSwitch.checked = false;
                 }
             }
 
-            function checkPassword(){
-                var x = document.getElementById("pass").value;
-                if (x === "haslo"){
-                    window.location="../chat/chat.html";
+            function switchTheme(e) {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+                else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+            var x = document.querySelector('.theme-switch input[type="checkbox"]');
+            if(x){
+                toggleSwitch.addEventListener('change', switchTheme, false);
+            }
+
+            function passwordStrength() {
+                var strongRegex = new RegExp("^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+                var mediumRegex = new RegExp("^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+                var enoughRegex = new RegExp("(?=.{6,}).*", "g");
+                var pwd = document.getElementById("password1");
+                var bar = document.getElementById("progress-bar");
+                if (pwd.value.length == 0) {
+                    bar.style.background = "rgb(255,255,255";
+                    bar.style.width = "0%";
+                } else if (false == enoughRegex.test(pwd.value)) {
+                    bar.style.background = "rgb(255,70,70)";
+                    bar.style.width = "25%";
+                } else if (strongRegex.test(pwd.value)) {
+                    bar.style.background = "rgb(70,255,70)";
+                    bar.style.width = "100%";
+                } else if (mediumRegex.test(pwd.value)) {
+                    bar.style.background = "rgb(255,255,90)";
+                    bar.style.width = "75%";
                 } else {
-                    alert("Błędne hasło");
+                    bar.style.background = "rgb(255,170,50)";
+                    bar.style.width = "50%";
+                }
+            }
+
+            function secondPasswordCheck() {
+                var pwd = document.getElementById("password1");
+                var pwd2 = document.getElementById("password2");
+                if (pwd2.value.length == 0){
+                    pwd2.style.background = "rgb(255,255,255)";
+                }else if (pwd.value == pwd2.value) {
+                    pwd2.style.background = "rgb(150,255,150)";
+                }else{
+                    pwd2.style.background = "rgb(255,150,150)";
+                }
+            }
+
+            function menuFunction() {
+                var x = document.getElementById("menu_id");
+                if (x.className === "menu") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "menu";
                 }
             }
 
