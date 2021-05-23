@@ -71,58 +71,64 @@ function menuFunction() {
 }
 
 async function addMessages(msg, scroll) {
-    if (typeof msg.name !== "undefined") {
-        var date = dateNow();
+    let room_id = await loadRoom();
+    if(room_id == msg.room_id){
 
-        if (typeof msg.time !== "undefined") {
-            var n = msg.time;
-        } else {
-            var n = date;
-        }
-        var global_name = await loadName();
-        var content;
+        if (typeof msg.name !== "undefined") {
+            let date = dateNow();
+            let n;
+            if (typeof msg.time !== "undefined") {
+                n = msg.time;
+            } else {
+                n = date;
+            }
+            let global_name = await loadName();
+            let content;
 
-        if(msg.type == 1){
-            if (global_name == msg.name) {
-            content =
-                '<div class="container darker">' +
-                '<b style="color:#000" class="left">' +
-                msg.name +
-                "</b><p>" +
-                msg.message +
-                '</p><span class="time-left">' +
-                n +
-                "</span></div>";
-            }else{
+            if(msg.type == 1){
+                if (global_name == msg.name) {
                 content =
-                    '<div class="container">' +
-                    '<b style="color:#000" class="right">' +
+                    '<div class="container darker">' +
+                    '<img src=' + msg.picture + ' style="width: 32px; height: 32px; border-radius: 50%;"/>' +
+                    '<b style="color:#000" class="left">' +
                     msg.name +
                     "</b><p>" +
                     msg.message +
-                    '</p><span class="time-right">' +
+                    '</p><span class="time-left">' +
                     n +
                     "</span></div>";
+                }else{
+                    content =
+                        '<div class="container">' +
+                        '<img src=' + msg.picture + ' style="width: 32px; height: 32px; border-radius: 50%;"/>' +
+                        '<b style="color:#000" class="right">' +
+                        msg.name +
+                        "</b><p>" +
+                        msg.message +
+                        '</p><span class="time-right">' +
+                        n +
+                        "</span></div>";
+                }
             }
-        }
-        if(msg.type == 2){
-            content =   '<div class="user_joined">' +
-                        '<p>' + msg.name + ' dołączył do pokoju</p>' +
-                        '</div>';
+            if(msg.type == 2){
+                content =   '<div class="user_joined">' +
+                            '<p>' + msg.name + ' dołączył do pokoju</p>' +
+                            '</div>';
+            }
+
+            if(msg.type == 3){
+                content =   '<div class="user_left">' +
+                            '<p>' + msg.name + ' wyszedł z pokoju</p>' +
+                            '</div>';
+            }
+            // update div
+            let messageDiv = document.getElementById("messages");
+            messageDiv.innerHTML += content;
         }
 
-        if(msg.type == 3){
-            content =   '<div class="user_left">' +
-                        '<p>' + msg.name + ' wyszedł z pokoju</p>' +
-                        '</div>';
+        if (scroll) {
+            scrollSmoothToBottom("messages");
         }
-        // update div
-        var messageDiv = document.getElementById("messages");
-        messageDiv.innerHTML += content;
-    }
-
-    if (scroll) {
-        scrollSmoothToBottom("messages");
     }
 }
 
@@ -133,6 +139,16 @@ async function loadName() {
         })
         .then(function (text) {
             return text["name"];
+        });
+}
+
+async function loadPicture() {
+    return await fetch("/user/get-picture")
+        .then(async function (response) {
+            return await response.json();
+        })
+        .then(function (text) {
+            return text["picture"];
         });
 }
 
@@ -162,7 +178,6 @@ async function loadMessages() {
             return await response.json();
         })
         .then(function (text) {
-            console.log(text);
             return text;
         });
 }

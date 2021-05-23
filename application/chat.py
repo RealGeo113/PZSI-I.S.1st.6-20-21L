@@ -168,6 +168,16 @@ def get_name():
     return jsonify(data)
 
 
+@chat.route('/user/get-picture')
+def get_picture():
+    data = {"picture": ""}
+
+    if current_user.is_authenticated:
+        data = {"picture": current_user.image_path}
+
+    return jsonify(data)
+
+
 @chat.route('/user/get-user-id')
 def get_user_id():
     data = {"user_id": ""}

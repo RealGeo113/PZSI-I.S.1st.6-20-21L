@@ -92,7 +92,6 @@
     {#        }#}
     {#    }#}
     {#    });#}
-    {#}#}
 
     function updateUsers(){
         $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {
@@ -149,8 +148,8 @@
                                 "</td><td><button class='btn btn-primary' onclick='inviteUser(this," +
                                 data[i].user_id +
                                 ")'>Zaproś</button></td></tr>";
+                    $('#invite-users-table').append(content);
                 }
-                $('#invite-users-table').append(content);
             }
         });
     }

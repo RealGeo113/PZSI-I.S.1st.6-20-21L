@@ -15,6 +15,7 @@ socket.on("connect", async function () {
         let msg_input = document.getElementById("msg");
         let user_input = msg_input.value;
         let user_name = await loadName();
+        let picture = await loadPicture();
         let room_id = await loadRoom();
 
         // clear msg box value
@@ -24,6 +25,7 @@ socket.on("connect", async function () {
         socket.emit("event", {
             message: user_input,
             name: user_name,
+            picture: picture,
             type: 1,
             room_id: room_id
         });

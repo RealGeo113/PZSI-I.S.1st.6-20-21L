@@ -27,6 +27,7 @@ def create_app():
     from .models import User
     from .users import users
     from .friends import friends
+    from .profile import profile
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
@@ -34,6 +35,7 @@ def create_app():
     app.register_blueprint(notes, url_prefix='/')
     app.register_blueprint(users, url_prefix='/')
     app.register_blueprint(friends, url_prefix='/')
+    app.register_blueprint(profile, url_prefix='/')
 
     # zaimportuj modele z bazy danych
     # jesli jeszcze nie ma stworzonej bazy danych, to ja utworz
