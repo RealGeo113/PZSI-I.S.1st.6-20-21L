@@ -100,7 +100,7 @@ async function addMessages(msg, scroll) {
                 }else{
                     content =
                         '<div class="container">' +
-                        '<img src=' + msg.picture + ' style="width: 32px; height: 32px; border-radius: 50%;"/>' +
+                        '<img src=' + msg.picture + ' style="width: 32px; height: 32px; border-radius: 50%;" class="right"/>' +
                         '<b style="color:#000" class="right">' +
                         msg.name +
                         "</b><p>" +
@@ -233,12 +233,19 @@ async function sendNotification(user_id){
     socket.emit("notification", {sender_id: sender_id, sender_name: sender_name, receiver_id: user_id, room_id: room_id});
 }
 
+function playAudio(){
+    let audio = new Audio('/static/notification.mp3');
+    audio.volume = 0.5;
+    audio.play();
+}
+
 async function displayNotification(notification){
     let user_id = await loadUserId();
     if(notification.receiver_id == user_id){
         let content =   "<div class='notification'><div class='notification-message'> Użytkownik <span class='username'>" + notification.sender_name + "</span> zaprasza cię do pokoju!</div><div class='notification-buttons'><a ><button class='btn btn-danger' onclick='discardNotification()'>Odrzuć</button></a><a href='/chatroom/" + notification.room_id + "/enter'><button class='btn btn-success'>Akceptuj</button></a></div></div>";
         $('.notification-container').append(content);
         $('.notification-container').toggleClass('notification-visible');
+        playAudio();
     }
 
     setTimeout(function (){
@@ -256,7 +263,23 @@ function discardNotification(){
     $('.notification-container').html("");
 }
 
-
-
+function userList(){
+    $('#invite-users-table').html("");
+    $.getJSON($SCRIPT_ROOT + '/_get_users', {}, function (data) {
+        for(let i = 0; i < data.length; i++){
+            let content = "";
+            if(users.includes(data[i].username)){
+                continue;
+            }else{
+                content =   "<tr class='invite-users-table-item'><td>" +
+                            data[i].username +
+                            "</td><td><button class='btn btn-primary' onclick='inviteUser(this," +
+                            data[i].user_id +
+                            ")'>Zaproś</button></td></tr>";
+                $('#invite-users-table').append(content);
+            }
+        }
+    });
+}
 
 

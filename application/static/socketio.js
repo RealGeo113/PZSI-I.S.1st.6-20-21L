@@ -39,10 +39,15 @@ socket.on("disconnect", async function (msg) {
     });
 });
 
-socket.on("message response", function (msg) {
-    addMessages(msg, true);
-});
-
 socket.on("notification", function(notification){
     displayNotification(notification);
 });
+
+socket.on("leave_room", function (){
+    leaveRoom();
+});
+
+socket.on("enter_room", function (){
+    enterRoom();
+});
+

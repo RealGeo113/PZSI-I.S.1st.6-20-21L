@@ -27,7 +27,7 @@
         <div class="col"><hr></div>
     </div>
     <div>
-        <a href="/chatroom/{{ room_id }}/leave" onclick="leaveRoom()"><button class="btn btn-danger">Wyjdź</button></a>
+        <button class="btn btn-danger" onclick="leaveRoomJson(); leaveRoom();">Wyjdź</button>
     </div>
 
     <div id="chat-container">
@@ -67,14 +67,13 @@
 
 {% block scripts %}
 <script type=text/javascript>
+
+    socket.on("message response", function (msg) {
+        addMessages(msg, true);
+    });
+
     let users = [];
     let participants = document.getElementById('room-participants-container');
-
-    setInterval(
-        function() {
-            updateUsers();
-            return false;
-        }, 1000);
 
     {#function updateUsers(){#}
     {#    $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {#}
@@ -93,19 +92,7 @@
     {#    }#}
     {#    });#}
 
-    function updateUsers(){
-        $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {
-            if(data.length != (users.length)){
-                users = data;
-                participants.innerHTML = '';
-                for (let i = 0; i < users.length; i++){
-                    let username = users[i];
-                    let content = '<div class="user">' + username + '</div>';
-                    participants.innerHTML += content;
-                }
-            }
-        });
-    }
+
 
     function kickUser(user_id){
         fetch("/chatroom/{{ room_id }}/kick/" + user_id, {
@@ -122,12 +109,19 @@
     }
 
     function enterRoom(){
+        socket.emit('updateUsers', { room_id: {{ room_id }} });
         socket.emit('event', {message: '', name: '{{ user.username }}', type: 2, room_id: {{ room_id }} });
+        userList();
     }
 
     function leaveRoom(){
+        socket.emit('updateUsers', { room_id: {{ room_id }} });
         socket.emit('event', {message: '', name: '{{ user.username }}', type: 3, room_id: {{ room_id }} });
+        setTimeout(function (){
+            window.location.href = "/rooms";
+        }, 100);
     }
+
 
     function inviteUser(el, user_id){
         el.disabled = true;
@@ -135,25 +129,24 @@
         sendNotification(user_id);
     }
 
-    function userList(){
-        $('#invite-users-table').html("");
-        $.getJSON($SCRIPT_ROOT + '/_get_users', {}, function (data) {
-            for(let i = 0; i < data.length; i++){
-                let content = "";
-                if(users.includes(data[i].username)){
-                    continue;
-                }else{
-                    content =   "<tr class='invite-users-table-item'><td>" +
-                                data[i].username +
-                                "</td><td><button class='btn btn-primary' onclick='inviteUser(this," +
-                                data[i].user_id +
-                                ")'>Zaproś</button></td></tr>";
-                    $('#invite-users-table').append(content);
+    socket.on("updateUsers", function (){
+        updateUsers();
+    });
+
+    function updateUsers(){
+        console.log("Updating users");
+        $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {
+            if(data.length != (users.length)){
+                users = data;
+                participants.innerHTML = '';
+                for (let i = 0; i < users.length; i++){
+                    let username = users[i];
+                    let content = '<div class="user">' + username + '</div>';
+                    participants.innerHTML += content;
                 }
             }
         });
     }
-
 
     enterRoom();
     updateUsers();
