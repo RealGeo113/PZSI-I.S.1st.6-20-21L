@@ -26,10 +26,13 @@
         <div class="col-auto"><p class="h3" align="center">Start Chatting</p></div>
         <div class="col"><hr></div>
     </div>
-    <div>
-        <button class="btn btn-danger" onclick="leaveRoomJson(); leaveRoom();">Wyjdź</button>
+    <div class="row">
+        <div class="col"></div>
+        <div>
+             <button class="btn btn-danger" onclick="leaveRoomJson(); leaveRoom();">Wyjdź</button>
+        </div>
+        <div class="col"></div>
     </div>
-
     <div id="chat-container">
         <div class="container">
             <div id="messages" class="overflow-auto msgs" style="overflow-y: scroll; height:500px;">
@@ -48,12 +51,19 @@
                 <h5>Użytkownicy w pokoju</h5>
                 <div id="room-participants-table-container">
                     <table id="room-participants-table">
+                        <tbody id="room-participants">
+
+                        </tbody>
                     </table>
                 </div>
             </div>
         <div id="invite-users-container">
             <h5>Zaproś użytkownika</h5>
-            <button class="btn btn-primary" onclick="userList()">Odśwież</button>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary" onclick="userList()">Odśwież</button>
+                </div>
+            </div>
             <div id="invite-users-table-container">
                 <table id="invite-users-table">
                 </table>
@@ -73,7 +83,7 @@
     });
 
     let users = [];
-    let participants = document.getElementById('room-participants-container');
+    let participants = document.getElementById('room-participants');
 
     {#function updateUsers(){#}
     {#    $.getJSON($SCRIPT_ROOT + '/_get_participants/{{ room_id }}', {}, function (data) {#}
@@ -118,7 +128,7 @@
         socket.emit('updateUsers', { room_id: {{ room_id }} });
         socket.emit('event', {message: '', name: '{{ user.username }}', type: 3, room_id: {{ room_id }} });
         setTimeout(function (){
-            window.location.href = "/rooms";
+            window.location.href = "/chatroom/{{ room_id }}/leave";
         }, 100);
     }
 
@@ -141,7 +151,7 @@
                 participants.innerHTML = '';
                 for (let i = 0; i < users.length; i++){
                     let username = users[i];
-                    let content = '<div class="user">' + username + '</div>';
+                    let content = '<tr><td class="user">' + username + '<td></tr>';
                     participants.innerHTML += content;
                 }
             }

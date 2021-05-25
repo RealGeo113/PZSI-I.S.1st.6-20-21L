@@ -107,18 +107,17 @@ def leave_chatroom(room_id):
     user_id = current_user.user_id
     room_id = int(room_id)
     participant = Participant.query.filter_by(user_id=user_id, room_id=room_id).first()
-
     if participant:
         db.session.delete(participant)
         db.session.commit()
 
         session["participant"] = None
 
-        # flash('Wyjście z pokoju zakończone pomyślnie.', category='success')
-
+        # # flash('Wyjście z pokoju zakończone pomyślnie.', category='success')
         return redirect(url_for('views.rooms'))
 
-    return render_template("chat/chatroom.html", user=current_user, room_id=room_id)
+    return redirect(url_for('views.rooms'))
+    # return render_template("chat/chatroom.html", user=current_user, room_id=room_id)
 
 
 @chat.route('/chatroom/<room_id>/kick/<user_id>', methods=['GET', 'POST'])
