@@ -26,7 +26,7 @@ class ProdConfig(Config):
     FLASK_ENV = 'production'
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:Rafal123#@localhost:5432/pinpoint_db'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:postgres@localhost:5432/pinpoint_db'
 
 
 class DevConfig(Config):
