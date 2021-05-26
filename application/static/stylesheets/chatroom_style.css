@@ -4,9 +4,7 @@
 
 #chat-container{
     display: grid;
-    grid-template-columns: minmax(auto, 900px) 300px;
-    justify-content: center;
-    margin: 5px;
+    grid-template-columns: auto 300px;
 }
 
 #chat-side{
@@ -45,11 +43,4 @@
 
 .invite-users-table-item td{
     padding: 5px;
-}
-
-@media screen and (max-width: 800px) {
-    #chat-container{
-        grid-template-columns: 1fr;
-        grid-template-rows: auto fit-content(350px) fit-content(350px);
-    }
 }
