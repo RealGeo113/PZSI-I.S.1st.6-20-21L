@@ -1,5 +1,5 @@
 from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
+import flask_migrate
 from run import app
 from application import db
 
@@ -13,9 +13,9 @@ python manage.py db upgrade
 """
 
 manager = Manager(app)
-migrate = Migrate(app, db)
+migrate = flask_migrate.Migrate(app, db)
 
-manager.add_command('db', MigrateCommand)
+manager.add_command('db', flask_migrate.MigrateCommand)
 
 
 @manager.command
